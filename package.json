@@ -2,14 +2,20 @@
   "name": "midi-to-json",
   "version": "1.0.0",
   "scripts": {
-    "start": "node index.js"
+    "start": "webpack-dev-server --config ./webpack.config.js --open --hot"
   },
   "dependencies": {
     "@tonejs/midi": "^2.0.7",
+    "file-saver": "^2.0.2",
+    "json-midi-encoder": "^3.4.8",
+    "midi-json-parser": "^6.4.7",
     "synth-js": "^0.1.1",
     "yargs": "^14.2.0"
   },
   "devDependencies": {
-    "eslint": "^6.6.0"
+    "eslint": "^6.6.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.9.0"
   }
 }

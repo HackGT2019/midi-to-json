@@ -1,0 +1,15 @@
+<input type="file" id="file" name="file" />
+<output id="list"></output>
+
+<script>
+    async function handleFileSelect(evt) {
+        console.log();
+
+        var file = evt.target.files[0]; // FileList object
+        const output = await file.arrayBuffer();
+        clientSideConverter.loadMidi(output, "despacito", "voice");
+    }
+
+    document.getElementById('file').addEventListener('change', handleFileSelect, false);
+</script>
+<script src="dist/main.js"></script>

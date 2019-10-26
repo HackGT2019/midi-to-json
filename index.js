@@ -27,6 +27,12 @@ function loadMidi(pathToMidi, outputName, vocalTrack) {
     const midiData = fs.readFileSync(pathToMidi);
     const midi = new Midi(midiData);
     const vocalTracks = [];
+    midi.header.tempos = [
+        {
+            'bpm': 112,
+            'ticks': 0
+        },
+    ];
     midi.tracks = midi.tracks.filter((track) => {
         let keep;
         if (vocalTrack.toLowerCase() === track.name.toLowerCase()) {
@@ -37,8 +43,11 @@ function loadMidi(pathToMidi, outputName, vocalTrack) {
         }
         return keep;
     });
+
     writeOutputMidiAndConvert(OUTPUT_PATH, outputName + '_NO_VOCALS', midi);
-    processVocals(vocalTracks[0], midi, outputName); // process the vocals
+    if (vocalTracks.length > 0) {
+        processVocals(vocalTracks[0], midi, outputName); // process the vocals
+    }
     console.log('Completed');
 }
 
@@ -51,11 +60,11 @@ function writeOutputMidiAndConvert(filePath, name, midi) {
 
 }
 function midiToWav(pathToMidi, filePath, name) {
-    // const buffer = fs.readFileSync(pathToMidi);
-    // const wavBuffer = synth.midiToWav(buffer).toBuffer();
-    // const fullPath = filePath + name + '.wav';
-    // fs.writeFileSync(fullPath, wavBuffer, {encoding: 'binary'});
-    // console.log(`Outputting wav to ${fullPath}`);
+    const buffer = fs.readFileSync(pathToMidi);
+    const wavBuffer = synth.midiToWav(buffer).toBuffer();
+    const fullPath = filePath + 'WAV_' + name + '.wav';
+    fs.writeFileSync(fullPath, wavBuffer, {encoding: 'binary'});
+    console.log(`Outputting wav to ${fullPath}`);
 }
 
 function processVocals(vocalTrack, originalMidi, outputName) {
@@ -64,5 +73,4 @@ function processVocals(vocalTrack, originalMidi, outputName) {
     const vocalTrackPath = OUTPUT_PATH + outputName + '.json';
     fs.writeFileSync(vocalTrackPath, JSON.stringify(originalMidi));
     console.log(`Writing vocal track to ${vocalTrackPath}`);
-
 }
