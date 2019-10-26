@@ -1,0 +1,13 @@
+{
+  "name": "midi-to-json",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@tonejs/midi": "^2.0.7"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0"
+  }
+}
