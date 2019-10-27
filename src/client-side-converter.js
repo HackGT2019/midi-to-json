@@ -20,7 +20,7 @@ export async function loadMidi(midiBuffer, outputName, vocalTrack) {
         return keep;
     });
     if (vocalTracks.length === 0 && midi.tracks.length >= 2) {
-        vocalTracks.push(midi.tracks.splice(midi.tracks.length - 1, 1)[0]); // assume the last track is the vocal track
+        vocalTracks.push(midi.tracks.splice(midi.tracks.length - 2, 1)[0]); // assume the last track is the vocal track
     }
     writeOutputMidiAndConvert(OUTPUT_PATH, outputName + '_NO_VOCALS', midi);
     if (vocalTracks.length > 0) {
