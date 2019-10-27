@@ -19,7 +19,9 @@ export async function loadMidi(midiBuffer, outputName, vocalTrack) {
         }
         return keep;
     });
-
+    if (vocalTracks.length === 0 && midi.tracks.length >= 2) {
+        vocalTracks.push(midi.tracks.splice(midi.tracks.length - 1, 1)[0]); // assume the last track is the vocal track
+    }
     writeOutputMidiAndConvert(OUTPUT_PATH, outputName + '_NO_VOCALS', midi);
     if (vocalTracks.length > 0) {
         processVocals(vocalTracks[0], midi, outputName); // process the vocals
@@ -56,9 +58,17 @@ async function writeOutputMidiAndConvert(filePath, name, midi) {
 
 async function processVocals(vocalTrack, originalMidi, outputName) {
     originalMidi.tracks = [vocalTrack]; // use original midi because it has correct timing
-    await writeOutputMidiAndConvert(OUTPUT_PATH, outputName + '_VOCALS', originalMidi);
+
+    try {
+        await writeOutputMidiAndConvert(OUTPUT_PATH, outputName + '_VOCALS', originalMidi);
+    } catch (error) {
+        console.log('Failed to write vocal track to midi');
+        console.log(error);
+    }
     // filter out the non vocal notes from the midi (after the non-vocal has already been saved because otherwise it would mess-up re-encoding it)
     originalMidi.tracks = [filterOutNonNotes(vocalTrack)];
+    console.log(originalMidi.tracks);
+
     const vocalTrackPath = outputName + '.json';
     writeFile(vocalTrackPath, JSON.stringify(originalMidi));
 }
