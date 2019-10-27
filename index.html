@@ -7,7 +7,8 @@
 
         var file = evt.target.files[0]; // FileList object
         const output = await file.arrayBuffer();
-        clientSideConverter.loadMidi(output, "despacito", "voice");
+        const outputName = file.name.substring(0, file.name.lastIndexOf('.'));
+        clientSideConverter.loadMidi(output, outputName, "voice");
     }
 
     document.getElementById('file').addEventListener('change', handleFileSelect, false);

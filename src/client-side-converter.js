@@ -55,15 +55,16 @@ async function writeOutputMidiAndConvert(filePath, name, midi) {
 }
 
 async function processVocals(vocalTrack, originalMidi, outputName) {
-    originalMidi.tracks = [filterOutNonNotes(vocalTrack)]; // use original midi because it has correct timing
+    originalMidi.tracks = [vocalTrack]; // use original midi because it has correct timing
     await writeOutputMidiAndConvert(OUTPUT_PATH, outputName + '_VOCALS', originalMidi);
+    // filter out the non vocal notes from the midi (after the non-vocal has already been saved because otherwise it would mess-up re-encoding it)
+    originalMidi.tracks = [filterOutNonNotes(vocalTrack)];
     const vocalTrackPath = outputName + '.json';
     writeFile(vocalTrackPath, JSON.stringify(originalMidi));
 }
 
 function filterOutNonNotes(vocalTrack) {
     return vocalTrack.filter((event) => {
-        console.log(event);
         return event.noteOn != null || event.noteOff != null;
     });
 }
