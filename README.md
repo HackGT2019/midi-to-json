@@ -1,4 +1,5 @@
 **Karaoke: MIDI to JSON and MIDI**:
+[![Build Status](https://travis-ci.com/HackGT2019/midi-to-json.svg?branch=master)](https://travis-ci.com/HackGT2019/midi-to-json)
 
 Takes a MIDI with a "vocal track" and outputs three files:
 - A MIDI with just the vocal track (not really used for anything)
