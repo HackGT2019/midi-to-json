@@ -3,9 +3,18 @@ import { encode } from 'json-midi-encoder';
 import { saveAs } from 'file-saver';
 
 const synth = require('synth-js');
-
 const OUTPUT_PATH = './output/';
-export async function loadMidi(midiBuffer, outputName, vocalTrack) {
+
+async function handleFileSelect(evt) {
+    var file = evt.target.files[0]; // FileList object
+    const output = await file.arrayBuffer();
+    const outputName = file.name.substring(0, file.name.lastIndexOf('.'));
+    loadMidi(output, outputName, "voice");
+}
+
+document.getElementById('file').addEventListener('change', handleFileSelect, false);
+
+async function loadMidi(midiBuffer, outputName, vocalTrack) {
     const midi = await parseArrayBuffer(midiBuffer);
     const vocalTracks = [];
     midi.tracks = midi.tracks.filter((track) => {
